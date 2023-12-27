@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Security.Cryptography;
@@ -14,6 +15,8 @@ namespace InventorySystemCsharp
 {
     public partial class Login : Form
     {
+        public object ActiveMdiChild { get; set; }
+
         public Login()
         {
             InitializeComponent();
@@ -31,11 +34,16 @@ namespace InventorySystemCsharp
             try
             {
                 MySqlConnection conn = new MySqlConnection(@"datasource=127.0.0.1;port=3306;SslMode=none;username=root;password=;database=inventorymgcsharp;");
-                MySqlDataAdapter sda = new MySqlDataAdapter("select * from users where username='" + bunifuMetroTextbox1.Text.Trim() + "'and password='" + MD5Hash(bunifuMetroTextbox2.Text.Trim()) + "'", conn); DataTable dt = new DataTable();
+                MySqlDataAdapter sda = new MySqlDataAdapter("select * from users where username='" + bunifuMetroTextbox1.Text.Trim() + "'and password=''", conn);
+                DataTable dt = new DataTable();
                 sda.Fill(dt);
+
+                // @PreCondition
+                Debug.Assert(dt.Rows.Count == 1, "Number of rows in DataTable should be 1");
+
                 if (dt.Rows.Count == 1)
                 {
-                    MySqlCommand cmd = new MySqlCommand("select * from users where username='" + bunifuMetroTextbox1.Text.Trim() + "'and password='" + MD5Hash(bunifuMetroTextbox2.Text.Trim()) + "'", conn);
+                    MySqlCommand cmd = new MySqlCommand("select * from users where username='" + bunifuMetroTextbox1.Text.Trim() + "'and password=''", conn);
                     conn.Open();
                     cmd.ExecuteNonQuery();
                     MySqlDataReader reader;
@@ -44,7 +52,7 @@ namespace InventorySystemCsharp
                     {
                         userdetail user = new userdetail();
                         user.setUname((string)reader["username"].ToString());
-                      
+
                         if ((string)reader["usertype"].ToString() == "member")
                         {
                             Home home = new Home();
@@ -76,7 +84,7 @@ namespace InventorySystemCsharp
             }
         }
 
-        public static string MD5Hash(string input)
+            public static string MD5Hash(string input)
         {
             StringBuilder hash = new StringBuilder();
             MD5CryptoServiceProvider md5provider = new MD5CryptoServiceProvider();
@@ -93,5 +101,16 @@ namespace InventorySystemCsharp
         {
             this.Close();
         }
+
+
+        
+
+
+
+
+
+
+
+
     }
 }

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using System.Security.Cryptography;
+using System.Diagnostics;
 
 namespace InventorySystemCsharp
 {
@@ -101,36 +102,41 @@ namespace InventorySystemCsharp
         {
             if (MfnameTxt.Text != "" && MlnameTxt.Text != "" && MusernameTxt.Text != "" && MphonenumTxt.Text != "" && MpassTxt.Text != "" && MrepassTxt.Text != "" && typecomboTxt.Text != "")
             {
-                if (MpassTxt.Text == MrepassTxt.Text)
+                //@Precondition
+                Debug.Assert(MpassTxt.Text == MrepassTxt.Text, "Password and Confirm Password should match"); // Assertion for password match
+                
+
+
+                try
                 {
-                    try
-                    {
-                        //String status = "manager";
-                        MySqlConnection conn = new MySqlConnection(@"datasource=127.0.0.1;port=3306;SslMode=none;username=root;password=;database=inventorymgcsharp;");
-                        string query = "insert into `users`(`first`,`last`,`username`,`phone`,`password`,`usertype`) values('" + MfnameTxt.Text.Trim() + "','" + MlnameTxt.Text.Trim() + "','" + MusernameTxt.Text.Trim() + "','" + MphonenumTxt.Text.Trim() + "','" + MD5Hash(MpassTxt.Text.Trim()) + "','" + typecomboTxt.Text.Trim() + "')";
-                        MySqlCommand cmd = new MySqlCommand(query, conn);
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                        conn.Close();
-                        MessageBox.Show("New Manager account has been created successfully!");
-                        
-                    }
-                    catch (MySqlException ex)
-                    {
-                        MessageBox.Show("This Username is already taken!");
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.ToString());
-                    }
+                    //String status = "manager";
+                    MySqlConnection conn = new MySqlConnection(@"datasource=127.0.0.1;port=3306;SslMode=none;username=root;password=;database=inventorymgcsharp;");
+                    string query = "insert into users(first,last,username,phone,password,usertype) values('" + MfnameTxt.Text.Trim() + "','" + MlnameTxt.Text.Trim() + "','" + MusernameTxt.Text.Trim() + "','" + MphonenumTxt.Text.Trim() + "','" + MD5Hash(MpassTxt.Text.Trim()) + "','" + typecomboTxt.Text.Trim() + "')";
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                    MessageBox.Show("New Manager account has been created successfully!");
+
                 }
-                else
+                catch (MySqlException ex)
                 {
-                    MessageBox.Show("Given password doesn't match!!");
+                    MessageBox.Show("This Username is already taken!");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
                 }
             }
+
             else
+            {
+                //@Postcondition
+                Debug.Assert(false, "All fields should be filled"); // Assertion for all fields filled
                 MessageBox.Show("Fill all fields");
+            }
+
+
         }
 
         public static string MD5Hash(string input)
@@ -139,9 +145,9 @@ namespace InventorySystemCsharp
             MD5CryptoServiceProvider md5provider = new MD5CryptoServiceProvider();
             byte[] bytes = md5provider.ComputeHash(new UTF8Encoding().GetBytes(input));
 
-            for (int i = 0; i < bytes.Length; i++)
+            foreach (byte i in bytes)
             {
-                hash.Append(bytes[i].ToString("x2"));
+                hash.Append(i.ToString("x2"));
             }
             return hash.ToString();
         }
