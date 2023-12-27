@@ -61,3 +61,6 @@ C:\xampp\htdocs\InventoryManagementSystem\InventorySystem\obj\Debug\InventorySys
 C:\xampp\htdocs\Storage Sage\InventorySystem\obj\Debug\InventoryMSystem.csproj.AssemblyReference.cache
 C:\xampp\htdocs\Storage Sage\InventorySystem\obj\Debug\InventorySystem.exe
 C:\xampp\htdocs\Storage Sage\InventorySystem\obj\Debug\InventorySystem.pdb
+C:\xampp\htdocs\StockSage\InventorySystem\obj\Debug\InventoryMSystem.csproj.AssemblyReference.cache
+C:\xampp\htdocs\StockSage\InventorySystem\obj\Debug\InventorySystem.exe
+C:\xampp\htdocs\StockSage\InventorySystem\obj\Debug\InventorySystem.pdb
