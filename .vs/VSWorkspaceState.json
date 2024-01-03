@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\InventorySystem"
+    "\\InventorySystem",
+    "\\TestProject1"
   ],
-  "SelectedNode": "\\InventorySystem\\Program.cs",
+  "SelectedNode": "\\InventorySystem.sln",
   "PreviewInSolutionExplorer": false
 }

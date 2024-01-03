@@ -41,41 +41,46 @@ namespace InventorySystemCsharp
                 // @PreCondition
                 Debug.Assert(dt.Rows.Count == 1, "Number of rows in DataTable should be 1");
 
-                if (dt.Rows.Count == 1)
+                switch (dt.Rows.Count)
                 {
-                    MySqlCommand cmd = new MySqlCommand("select * from users where username='" + bunifuMetroTextbox1.Text.Trim() + "'and password=''", conn);
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                    MySqlDataReader reader;
-                    reader = cmd.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        userdetail user = new userdetail();
-                        user.setUname((string)reader["username"].ToString());
+                    case 1:
+                        {
+                            MySqlCommand cmd = new MySqlCommand("select * from users where username='" + bunifuMetroTextbox1.Text.Trim() + "'and password=''", conn);
+                            conn.Open();
+                            cmd.ExecuteNonQuery();
+                            MySqlDataReader reader;
+                            reader = cmd.ExecuteReader();
+                            while (reader.Read())
+                            {
+                                userdetail user = new userdetail();
+                                user.setUname((string)reader["username"].ToString());
 
-                        if ((string)reader["usertype"].ToString() == "member")
-                        {
-                            Home home = new Home();
-                            this.Hide();
-                            home.Show();
+                                if (reader["usertype"].ToString() == "member")
+                                {
+                                    Home home = new Home();
+                                    this.Hide();
+                                    home.Show();
+                                }
+                                if (reader["usertype"].ToString() == "manager")
+                                {
+                                    Manager_home manager = new Manager_home();
+                                    this.Hide();
+                                    manager.Show();
+                                }
+                                if ((string)reader["usertype"].ToString() == "admin")
+                                {
+                                    Admin_home admin = new Admin_home();
+                                    this.Hide();
+                                    admin.Show();
+                                }
+                            }
+
+                            break;
                         }
-                        if ((string)reader["usertype"].ToString() == "manager")
-                        {
-                            Manager_home manager = new Manager_home();
-                            this.Hide();
-                            manager.Show();
-                        }
-                        if ((string)reader["usertype"].ToString() == "admin")
-                        {
-                            Admin_home admin = new Admin_home();
-                            this.Hide();
-                            admin.Show();
-                        }
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Check Again");
+
+                    default:
+                        MessageBox.Show("Check Again");
+                        break;
                 }
             }
             catch (Exception x)
@@ -103,7 +108,18 @@ namespace InventorySystemCsharp
         }
 
 
-        
+        public class LoginService()
+        {
+            public bool Login(string username, string password)
+            {
+                // Add your login logic here
+                // For simplicity, let's assume a hardcoded valid username and password
+                string validUsername = "validUser";
+                string validPassword = "validPassword";
+
+                return (username == validUsername && password == validPassword);
+            }
+        }
 
 
 
